@@ -8,7 +8,7 @@ import server.Conversation;
 import server.Handler;
 
 class BasisController implements Handler {
-	public void LoginController() {
+	public BasisController() {
 		
 	}
 	
