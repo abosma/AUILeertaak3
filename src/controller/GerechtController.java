@@ -33,9 +33,6 @@ public class GerechtController implements Handler {
 		else if (uri.startsWith(prefix+"voeggerechttoe")){
 			voegGerechtToe(conversation);
 		}
-		else if (uri.startsWith(prefix+"verwijdergerecjt")){
-			verwijderGerecht(conversation);
-		}
 	}
 
 	/* De methode kan ��n gerecht toeveogen op basis van een Json Input met de volgende structuur:
@@ -59,10 +56,9 @@ public class GerechtController implements Handler {
 		ArrayList<Ingredient> ingredienten = new ArrayList<Ingredient>();
 		
 		for (JsonValue jsonValue : ja) {
-			JsonObject jo = (JsonObject)jsonValue;
 			
-			String iNaam = jo.toString(); 
-			System.out.println(iNaam);
+			String iNaam = jsonValue.toString(); 
+			
 			Ingredient tmp = infoSys.getIngredient(iNaam);
 			if(tmp == null){
 				tmp = new Ingredient(iNaam);
@@ -77,43 +73,6 @@ public class GerechtController implements Handler {
 		Gerecht nieuwGerecht = new Gerecht(naam, prijs, tijd, ingredienten);
 		
 		infoSys.addGerecht(nieuwGerecht);
-	}
-	
-	private void verwijderGerecht(Conversation conversation) {
-		JsonObject jsonGerecht = (JsonObject) conversation.getRequestBodyAsJSON();
-
-		String naam = jsonGerecht.getString("naam");
-		String strPrijs = jsonGerecht.getString("Prijs"); 
-		String strTijd = jsonGerecht.getString("tijd");
-		
-		JsonArray ja = (JsonArray) jsonGerecht.get("ingredienten");
-		
-		ArrayList<Ingredient> ingredienten = new ArrayList<Ingredient>();
-		
-		for (JsonValue jsonValue : ja) {
-			JsonObject jo = (JsonObject)jsonValue;
-			
-			String iNaam = jo.getString("naam"); 
-			Ingredient tmp = infoSys.getIngredient(iNaam);
-			if(tmp == null){
-				tmp = new Ingredient(iNaam);
-				infoSys.addIngredient(tmp);
-			}
-			ingredienten.add(tmp);
-		}
-		
-		ArrayList<Gerecht> gerechten = infoSys.getGerechten();
-		
-		int tijd = Integer.parseInt(strTijd);
-		double prijs = Double.parseDouble(strPrijs);
-		
-		Gerecht nieuwGerecht = new Gerecht(naam, prijs, tijd, ingredienten);
-		
-		for(Gerecht g : gerechten){
-			if(g.equals(nieuwGerecht)){
-				infoSys.removeGerecht(g);
-			}
-		}
 	}
 
 	private void alleGerechten(Conversation conversation) {

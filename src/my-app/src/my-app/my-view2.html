@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="my-view2">
   <template>
@@ -22,16 +23,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      <h1>Verwijderen</h1>
+      <template is="dom-repeat" items="{{lijst}}">
+        <li>{{ item.naam }} <small>{{ item.status }}</small> <button on-tap="verwijderen">Verwijderen</button></li>
+      </template>
     </div>
+
+    <iron-ajax
+      id="ophalenLijst"
+      method="POST"
+      url="/gerecht/allegerechten"
+      handle-as="json"
+      on-response="_vulLijst">
+    </iron-ajax>
   </template>
 
   <script>
     Polymer({
       is: 'my-view2',
+      properties: {
+       lijst: {
+          type: Object,
+        },
+      },
+
+      ready: function(){
+        this.$.ophalenLijst.generateRequest();
+      },
+
+      _vulLijst: function(request){
+        this.lijst = request.detail.response
+      },
+
+      verwijderen: function(){
+        //Hier moet komen voor te verwijderen
+      }
+
     });
   </script>
 </dom-module>
