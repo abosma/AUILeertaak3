@@ -38,7 +38,7 @@ public class GerechtController implements Handler {
 		}
 	}
 
-	/* De methode kan één gerecht toeveogen op basis van een Json Input met de volgende structuur:
+	/* De methode kan ï¿½ï¿½n gerecht toeveogen op basis van een Json Input met de volgende structuur:
 	 * {
 	 * 	"naam": "<naam>",
 	 *  "prijs": <prijs>,
@@ -61,7 +61,8 @@ public class GerechtController implements Handler {
 		for (JsonValue jsonValue : ja) {
 			JsonObject jo = (JsonObject)jsonValue;
 			
-			String iNaam = jo.getString("naam"); 
+			String iNaam = jo.toString(); 
+			System.out.println(iNaam);
 			Ingredient tmp = infoSys.getIngredient(iNaam);
 			if(tmp == null){
 				tmp = new Ingredient(iNaam);

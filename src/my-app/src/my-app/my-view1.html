@@ -9,6 +9,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
@@ -22,16 +25,90 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <h1>Aanmaken</h1>
+      <div style="width: 40%">
+        <paper-input always-float-label label="Naam" value="{{naam}}"></paper-input>
+        <paper-input always-float-label label="Prijs" value="{{prijs}}"></paper-input>
+        <paper-input always-float-label label="Bereidingsduur" value="{{bereidingsduur}}"></paper-input>
+        <paper-input id="toeIngredient" always-float-label label="Ingredient toevoegen" on-keydown="toeIngredient"></paper-input>
+
+
+        <h1>Ingredienten</h1>
+        <ul>
+          <template is="dom-repeat" items="{{ingredienten}}">
+            <li>{{ item }}</li>
+          </template>
+        </ul>
+
+        <button on-tap="confirmButton">Maak aan</button>
+      </div>
     </div>
+
+     <iron-ajax
+        id="toevoegen"
+        method="POST"
+        url="/gerecht/voeggerechttoe"
+        handle-as="json">
+      </iron-ajax>
   </template>
 
   <script>
     Polymer({
       is: 'my-view1',
+      properties: {
+        ingredienten: {
+          type: Array,
+          value: [],
+        },
+
+        prijs: {
+          type: String,
+        },
+
+        bereidingsduur: {
+          type: String,
+        },
+
+        naam: {
+          type: String,
+        },
+      },
+
+      toeIngredient: function (e) {
+          if (e.keyCode === 13) {
+            if(this.$.toeIngredient.value.length < 2){
+              alert('Je ingredienten naam is te kort')
+              return false;
+            }
+            this.push('ingredienten', this.$.toeIngredient.value)
+            this.$.toeIngredient.value = ""
+          }
+      },
+
+      confirmButton: function(e){
+        if(this.naam && this.bereidingsduur && this.prijs){
+          if(this.ingredienten.length > 0){
+
+            this.$.toevoegen.contentType = "application/json";
+            this.$.toevoegen.body = {
+                "naam": this.naam,
+                "Prijs": this.prijs,
+                "tijd": this.bereidingsduur,
+                "ingredienten": this.ingredienten,
+            };
+            
+            this.$.toevoegen.generateRequest();
+
+            alert('Aangemaakt!')
+
+          }else{
+            alert('Vul ingredienten in')
+          }
+        }else{
+          alert('Niet alles is ingevuld');
+        }
+      }
+
     });
   </script>
 </dom-module>
