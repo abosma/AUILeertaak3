@@ -33,7 +33,7 @@ public class GerechtController implements Handler {
 		else if (uri.startsWith(prefix+"voeggerechttoe")){
 			voegGerechtToe(conversation);
 		}
-		else if (uri.startsWith(prefix+"verwijdergerecjt")){
+		else if (uri.startsWith(prefix+"verwijdergerecht")){
 			verwijderGerecht(conversation);
 		}
 	}

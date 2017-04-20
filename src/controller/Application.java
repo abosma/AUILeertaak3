@@ -17,6 +17,7 @@ public class Application {
 		server.registerHandler("/student/presentie", basisController);
 		server.registerHandler("/gerecht/allegerechten", gerechtController);
 		server.registerHandler("/gerecht/voeggerechttoe", gerechtController);
+		server.registerHandler("/gerecht/verwijdergerecht", gerechtController);
 		server.start();
 	}
 }
