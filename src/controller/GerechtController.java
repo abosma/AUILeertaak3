@@ -33,6 +33,12 @@ public class GerechtController implements Handler {
 		else if (uri.startsWith(prefix+"voeggerechttoe")){
 			voegGerechtToe(conversation);
 		}
+<<<<<<< HEAD
+=======
+		else if (uri.startsWith(prefix+"verwijdergerecht")){
+			verwijderGerecht(conversation);
+		}
+>>>>>>> origin/master
 	}
 
 	/* De methode kan ��n gerecht toeveogen op basis van een Json Input met de volgende structuur:
