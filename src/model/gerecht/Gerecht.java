@@ -65,4 +65,20 @@ public class Gerecht {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(!o.equals(this)){
+			return false;
+		}else{
+			Gerecht temp = (Gerecht)o;
+			if(this.naam.equals(temp.naam) 
+				&& this.prijs == temp.prijs 
+				&& this.ingredienten.containsAll(temp.ingredienten)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
 }
