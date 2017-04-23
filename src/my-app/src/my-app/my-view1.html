@@ -28,12 +28,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h1>Aanmaken</h1>
       <div style="width: 40%">
         <paper-input always-float-label label="Naam" value="{{naam}}"></paper-input>
-        <paper-input always-float-label label="Prijs" value="{{prijs}}"></paper-input>
-        <paper-input always-float-label label="Bereidingsduur" value="{{bereidingsduur}}"></paper-input>
-        <paper-input id="toeIngredient" always-float-label label="Ingredient toevoegen" on-keydown="toeIngredient"></paper-input>
+        <paper-input always-float-label label="Prijs" value="{{prijs}}" placeholder="0.00"></paper-input>
+        <paper-input always-float-label label="Bereidingsduur (minuten)" value="{{bereidingsduur}}" placeholder="0"></paper-input>
+        <paper-input id="toeIngredient" always-float-label label="Ingredient toevoegen (Druk op enter om een individueel ingredient toe te voegen)" on-keydown="toeIngredient"></paper-input>
 
 
-        <h1>Ingredienten</h1>
+        <h1 style="margin-bottom: 0px; padding-bottom: 5px;">Ingredienten</h1>
         <ul>
           <template is="dom-repeat" items="{{ingredienten}}">
             <li>{{ item }}</li>
@@ -72,6 +72,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         naam: {
           type: String,
         },
+        c_visible: {
+          type: Boolean,
+          obeserver: '_visibilityObserver',
+        },
       },
 
       toeIngredient: function (e) {
@@ -85,6 +89,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
       },
 
+      _fix_price : function(price){
+        return price.replace(',','.');
+      },
+
       confirmButton: function(e){
         if(this.naam && this.bereidingsduur && this.prijs){
           if(this.ingredienten.length > 0){
@@ -92,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.toevoegen.contentType = "application/json";
             this.$.toevoegen.body = {
                 "naam": this.naam,
-                "Prijs": this.prijs,
+                "Prijs": this._fix_price(this.prijs),
                 "tijd": this.bereidingsduur,
                 "ingredienten": this.ingredienten,
             };
@@ -112,7 +120,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }else{
           alert('Niet alles is ingevuld');
         }
-      }
+      }, 
+      _visibilityObserver: function(){
+        console.log("view1: werk dit?");
+        console.log(this.c_visible);
+      },
 
     });
   </script>

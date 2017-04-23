@@ -53,9 +53,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				naam : {
 					type : String,
 				},
+			    c_visible: {
+			      type: Boolean,
+			      observer: '_visibilityObserver',
+			    },
 			},
 
 			ready : function() {
+				this._ophalen_gerechten();
+			},
+
+			_ophalen_gerechten : function(){
 				this.$.ophalenLijst.generateRequest();
 			},
 
@@ -74,7 +82,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				this.$.verwijderen.generateRequest();
 				this.$.ophalenLijst.generateRequest();
 				
-			}
+			},
+			_visibilityObserver: function(){
+				if(this.c_visible){
+					this._ophalen_gerechten();
+				}
+			},
 
 		});
 	</script> </dom-module>
