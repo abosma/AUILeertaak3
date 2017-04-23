@@ -20,8 +20,14 @@ public class InformatieSysteem {
 		}
 	}
 	
-	public boolean removeGerecht(Gerecht g){
-		return this.gerechten.remove(g);
+	public void removeGerecht(String na){
+		for(Gerecht g: getGerechten()){
+			if(na.equals(g.getNaam())){
+				gerechten.remove(g);
+				return;
+			}
+		}
+		return;
 	}
 	
 	public void addIngredient(Ingredient i){

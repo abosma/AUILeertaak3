@@ -25,6 +25,7 @@ public class GerechtController implements Handler {
 	
 	@Override
 	public void handle(Conversation conversation) {
+		System.out.println(conversation.getRequestedURI());
 		String uri = conversation.getRequestedURI();
 		String prefix = "/gerecht/";
 		if(uri.startsWith(prefix+"allegerechten")){
@@ -33,12 +34,9 @@ public class GerechtController implements Handler {
 		else if (uri.startsWith(prefix+"voeggerechttoe")){
 			voegGerechtToe(conversation);
 		}
-<<<<<<< HEAD
-=======
 		else if (uri.startsWith(prefix+"verwijdergerecht")){
 			verwijderGerecht(conversation);
 		}
->>>>>>> origin/master
 	}
 
 	/* De methode kan ��n gerecht toeveogen op basis van een Json Input met de volgende structuur:
@@ -49,6 +47,15 @@ public class GerechtController implements Handler {
 	 *  "ingredienten": <JsonArray {"naam": "<naam>", ...} >
 	 * }
 	 * */
+	
+	private void verwijderGerecht(Conversation conversation) {
+		JsonObject jsonGerecht = (JsonObject) conversation.getRequestBodyAsJSON();
+		String naam = jsonGerecht.getString("naam");
+		infoSys.removeGerecht(naam);
+		
+		
+	}
+	
 	private void voegGerechtToe(Conversation conversation) {
 		JsonObject jsonGerecht = (JsonObject) conversation.getRequestBodyAsJSON();
 		
@@ -87,6 +94,7 @@ public class GerechtController implements Handler {
 		
 		// loop over alle gerechten heen, die bekend zijn in het informatiesysteem
 		for(Gerecht g : infoSys.getGerechten()){
+//			System.out.println(g.getNaam());
 			//maak van alle ingredienten van het grecht een JsonArray
 			JsonArrayBuilder jabIngredienten = Json.createArrayBuilder();
 			for(Ingredient i : g.getIngredienten()){

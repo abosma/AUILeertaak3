@@ -12,53 +12,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module id="my-view2">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+<dom-module id="my-view2"> <template>
+<style include="shared-styles">
+:host {
+	display: block;
+	padding: 10px;
+}
+</style>
 
-        padding: 10px;
-      }
-    </style>
+<div class="card">
+	<h1>Verwijderen</h1>
+	<template is="dom-repeat" items="{{lijst}}">
+	<li>{{ item.naam }} <small>{{ item.status }}</small>
+		<button on-tap="verwijderen" data-args$="{{item.naam}}">Verwijderen</button></li>
+	</template>
+</div>
 
-    <div class="card">
-      <h1>Verwijderen</h1>
-      <template is="dom-repeat" items="{{lijst}}">
-        <li>{{ item.naam }} <small>{{ item.status }}</small> <button on-tap="verwijderen">Verwijderen</button></li>
-      </template>
-    </div>
+	<iron-ajax 
+		id="ophalenLijst" 
+		method="POST" 
+		url="/gerecht/allegerechten"
+		handle-as="json" 
+		on-response="_vulLijst"> 
+	</iron-ajax> 
+ 	<iron-ajax
+        id="verwijderen"
+        method="POST"
+        url="/gerecht/verwijdergerecht"
+        handle-as="json">
+     </iron-ajax>
+	
+	</template>
+<script>
+		Polymer({
+			is : 'my-view2',
+			properties : {
+				lijst : {
+					type : Object,
+				},
+				naam : {
+					type : String,
+				},
+			},
 
-    <iron-ajax
-      id="ophalenLijst"
-      method="POST"
-      url="/gerecht/allegerechten"
-      handle-as="json"
-      on-response="_vulLijst">
-    </iron-ajax>
-  </template>
+			ready : function() {
+				this.$.ophalenLijst.generateRequest();
+			},
 
-  <script>
-    Polymer({
-      is: 'my-view2',
-      properties: {
-       lijst: {
-          type: Object,
-        },
-      },
+			_vulLijst : function(request) {
+				this.lijst = request.detail.response
+			},
 
-      ready: function(){
-        this.$.ophalenLijst.generateRequest();
-      },
+			verwijderen : function(e) {
+				var args = e.target.getAttribute('data-args').split(',');
+				alert('U heeft het gerecht verwijderd');
+				this.$.verwijderen.contentType = "application/json";
+				this.$.verwijderen.body = {
+					"naam" : args[0]
+				};
 
-      _vulLijst: function(request){
-        this.lijst = request.detail.response
-      },
+				this.$.verwijderen.generateRequest();
+				this.$.ophalenLijst.generateRequest();
+				
+			}
 
-      verwijderen: function(){
-        //Hier moet komen voor te verwijderen
-      }
-
-    });
-  </script>
-</dom-module>
+		});
+	</script> </dom-module>
